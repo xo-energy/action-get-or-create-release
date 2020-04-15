@@ -1,0 +1,28 @@
+{
+  "plugins": [
+    "jest",
+    "prettier"
+  ],
+  "extends": [
+    "airbnb-base",
+    "plugin:jest/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "env": {
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2019
+  },
+  "rules": {
+    "prettier/prettier": [
+      "warn",
+      {
+        "printWidth": 100
+      }
+    ],
+    "prefer-destructuring": "off"
+  }
+}
