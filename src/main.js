@@ -1,11 +1,14 @@
 const core = require("@actions/core");
 const { context, GitHub } = require("@actions/github");
 const glob = require("@actions/glob");
+
+const bytes = require("bytes");
 const fs = require("fs");
 const mime = require("mime-types");
 const { basename } = require("path");
 
 const inputs = require("./inputs");
+const { getReleaseNotes } = require("./notes");
 
 async function getOrCreateRelease(github) {
   try {
@@ -22,13 +25,20 @@ async function getOrCreateRelease(github) {
       throw e;
     }
 
+    // when creating a new release, try to generate release notes
+    let body = inputs.body || "TBA";
+    if (inputs.previousReleaseSha) {
+      core.info("Generating release notes...");
+      body = await getReleaseNotes(github, inputs.body, inputs.previousReleaseSha, context.sha);
+    }
+
     core.info(`Creating release ${inputs.tagName}`);
     const response = await github.repos.createRelease({
       owner: context.repo.owner,
       repo: context.repo.repo,
       tag_name: inputs.tagName,
       name: inputs.releaseName || inputs.tagName,
-      body: inputs.body,
+      body,
       draft: true,
     });
     return response.data;
@@ -44,6 +54,7 @@ async function uploadAssets(github, uploadUrl, patterns) {
     const contentType = mime.lookup(file);
     const stat = fs.statSync(file);
     const read = fs.createReadStream(file);
+    core.info(`Uploading asset '${file}' (${bytes(stat.size)} ${contentType})`);
 
     // do these one at a time to avoid throttling, etc.
     // eslint-disable-next-line no-await-in-loop
@@ -72,6 +83,7 @@ async function run() {
 
     // if we created a draft release, optionally publish it
     if (release.draft && inputs.publish) {
+      core.info(`Publishing release ${release.name}`);
       await github.repos.updateRelease({
         owner: context.repo.owner,
         repo: context.repo.repo,
@@ -81,7 +93,7 @@ async function run() {
     }
 
     // output the release's upload_url and id
-    core.setOutput("release_id", release.id);
+    core.setOutput("release_id", release.id.toString());
     core.setOutput("upload_url", release.upload_url);
   } catch (e) {
     core.setFailed(e.message);

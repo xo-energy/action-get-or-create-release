@@ -11,6 +11,9 @@ inputs:
     description: GitHub personal access token
     required: true
     default: ${{ github.token }}
+  previous_release_sha:
+    description: Commit SHA of the previous release
+    required: false
   publish:
     description: true to publish the release, false to leave as a draft
     required: true

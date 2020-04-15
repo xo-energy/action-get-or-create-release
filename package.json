@@ -4,6 +4,7 @@
   "description": "GitHub Action that creates a GitHub release",
   "main": "dist/index.js",
   "scripts": {
+    "debug": "node --inspect-brk -r dotenv/config src/main.js",
     "build": "ncc build src/main.js -m",
     "lint": "eslint . --cache --fix",
     "test": "jest"
@@ -13,7 +14,10 @@
     "@actions/core": "^1.2.3",
     "@actions/github": "^2.1.1",
     "@actions/glob": "^0.1.0",
-    "mime-types": "^2.1.26"
+    "bytes": "^3.1.0",
+    "issue-parser": "^6.0.0",
+    "mime-types": "^2.1.26",
+    "mustache": "^4.0.1"
   },
   "devDependencies": {
     "@zeit/ncc": "^0.22.1",
