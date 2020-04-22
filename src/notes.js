@@ -8,13 +8,13 @@ const template = `
 # Changes
 {{body}}
 {{#commits}}
-- {{message}} (@{{author}}) {{sha}} {{#issues}}{{.}}{{/issues}}
+- {{sha}} {{message}} (@{{author}}{{#issues?}}; fixes{{#issues}} {{.}}{{/issues}}{{/issues?}})
 {{/commits}}
 `.trim();
 
 function getClosers(message) {
   const parsed = issueParser(message);
-  return parsed.actions && parsed.actions.close;
+  return parsed.actions.close;
 }
 
 async function getCommits(github, base, head) {
@@ -45,12 +45,16 @@ async function getReleaseNotes(github, body, base, head) {
   const commitsRaw = await getCommits(github, base, head);
 
   // parse closing keywords from the commit messages
-  const commits = commitsRaw.map((x) => ({
-    sha: x.sha,
-    message: x.commit.message,
-    author: x.author.login,
-    issues: getClosers(x.commit.message).map((c) => `${c.slug}${c.prefix}${c.issue}`),
-  }));
+  const commits = commitsRaw.map((x) => {
+    const issues = getClosers(x.commit.message);
+    return {
+      sha: x.sha,
+      message: x.commit.message.split(/[\r\n]+/, 1).shift(),
+      author: x.author.login,
+      "issues?": issues.length,
+      issues: issues.map((c) => `${c.slug || ""}${c.prefix}${c.issue}`),
+    };
+  });
 
   // template
   return mustache.render(template, {
@@ -59,4 +63,4 @@ async function getReleaseNotes(github, body, base, head) {
   });
 }
 
-module.exports = { getCommits, getReleaseNotes };
+module.exports = { getClosers, getCommits, getReleaseNotes };
