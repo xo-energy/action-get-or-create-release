@@ -1,6 +1,11 @@
 jest.mock("@actions/github", () => {
   return {
-    context: { repo: {} },
+    context: {
+      repo: {
+        owner: "org",
+        repo: "project",
+      },
+    },
   };
 });
 jest.unmock("../src/notes");
@@ -40,6 +45,7 @@ const mockCommits = [
   {
     sha: "abc",
     commit: {
+      author: { name: "User1" },
       message: "Fix error\n\nfixes #1",
     },
     author: { login: "user" },
@@ -47,6 +53,7 @@ const mockCommits = [
   {
     sha: "def",
     commit: {
+      author: { name: "User1" },
       message: "Add feature\n\ncloses #2",
     },
     author: { login: "user" },
@@ -54,6 +61,7 @@ const mockCommits = [
   {
     sha: "ghi",
     commit: {
+      author: { name: "Contributor1" },
       message: "Add feature\n\nTwo birds with one stone!\n\ncloses #3, closes #4",
     },
     author: { login: "contributor" },
@@ -61,6 +69,7 @@ const mockCommits = [
   {
     sha: "xyz",
     commit: {
+      author: { name: "User1" },
       message: "Cleanup",
     },
     author: { login: "user" },
@@ -116,10 +125,10 @@ describe("getReleaseNotes", () => {
       `
 # Changes
 
-- abc Fix error (@user; fixes #1)
-- def Add feature (@user; fixes #2)
-- ghi Add feature (@contributor; fixes #3 #4)
-- xyz Cleanup (@user)
+- abc Fix error ([User1](https://github.com/org/project/commits?author=user); fixes #1)
+- def Add feature ([User1](https://github.com/org/project/commits?author=user); fixes #2)
+- ghi Add feature ([Contributor1](https://github.com/org/project/commits?author=contributor); fixes #3 #4)
+- xyz Cleanup ([User1](https://github.com/org/project/commits?author=user))
 `.trimLeft()
     );
   });

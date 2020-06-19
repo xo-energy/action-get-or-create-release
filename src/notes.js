@@ -8,7 +8,7 @@ const template = `
 # Changes
 {{body}}
 {{#commits}}
-- {{sha}} {{message}} (@{{author}}{{#issues?}}; fixes{{#issues}} {{.}}{{/issues}}{{/issues?}})
+- {{sha}} {{message}} ({{{author}}}{{#issues?}}; fixes{{#issues}} {{.}}{{/issues}}{{/issues?}})
 {{/commits}}
 `.trim();
 
@@ -50,7 +50,7 @@ async function getReleaseNotes(github, body, base, head) {
     return {
       sha: x.sha,
       message: x.commit.message.split(/[\r\n]+/, 1).shift(),
-      author: x.author.login,
+      author: `[${x.commit.author.name}](https://github.com/${context.repo.owner}/${context.repo.repo}/commits?author=${x.author.login})`,
       "issues?": issues.length,
       issues: issues.map((c) => `${c.slug || ""}${c.prefix}${c.issue}`),
     };
