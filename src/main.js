@@ -39,6 +39,7 @@ async function getOrCreateRelease(github) {
       tag_name: inputs.tagName,
       name: inputs.releaseName || inputs.tagName,
       body,
+      prerelease: inputs.prerelease,
       draft: true,
     });
     return response.data;

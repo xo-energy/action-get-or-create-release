@@ -11,6 +11,9 @@ inputs:
     description: GitHub personal access token
     required: true
     default: ${{ github.token }}
+  prerelease:
+    description: true to identify the release as a prerelease
+    required: false
   previous_release_sha:
     description: Commit SHA of the previous release
     required: false

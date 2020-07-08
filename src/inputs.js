@@ -9,6 +9,7 @@ const inputs = {
   assets: core.getInput("assets"),
   body: core.getInput("body"),
   githubToken: core.getInput("github_token", { required: true }),
+  prerelease: core.getInput("prerelease") === "true",
   previousReleaseSha: core.getInput("previous_release_sha"),
   publish: core.getInput("publish", { required: true }) === "true",
   releaseName: stripRefs(core.getInput("release_name")),
