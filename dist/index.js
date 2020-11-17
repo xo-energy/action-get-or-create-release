@@ -12655,7 +12655,7 @@ module.exports = inputs;
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 const core = __webpack_require__(2186);
-const { context, GitHub } = __webpack_require__(5438);
+const { context, getOctokit } = __webpack_require__(5438);
 const glob = __webpack_require__(8090);
 
 const bytes = __webpack_require__(6966);
@@ -12728,7 +12728,7 @@ async function uploadAssets(github, uploadUrl, patterns) {
 
 async function run() {
   try {
-    const github = new GitHub(inputs.githubToken);
+    const github = getOctokit(inputs.githubToken);
 
     // gets an existing release or creates a new draft release
     const release = await getOrCreateRelease(github);

@@ -1,5 +1,5 @@
 const core = require("@actions/core");
-const { context, GitHub } = require("@actions/github");
+const { context, getOctokit } = require("@actions/github");
 const glob = require("@actions/glob");
 
 const bytes = require("bytes");
@@ -72,7 +72,7 @@ async function uploadAssets(github, uploadUrl, patterns) {
 
 async function run() {
   try {
-    const github = new GitHub(inputs.githubToken);
+    const github = getOctokit(inputs.githubToken);
 
     // gets an existing release or creates a new draft release
     const release = await getOrCreateRelease(github);
