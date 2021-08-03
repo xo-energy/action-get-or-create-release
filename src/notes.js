@@ -23,7 +23,7 @@ async function getCommits(github, base, head) {
   // compare commits with pagination
   let commits = [];
   try {
-    const request = github.repos.compareCommits.endpoint.merge({
+    const request = github.rest.repos.compareCommits.endpoint.merge({
       owner: context.repo.owner,
       repo: context.repo.repo,
       base,

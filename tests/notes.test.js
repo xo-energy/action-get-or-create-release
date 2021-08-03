@@ -77,10 +77,12 @@ const mockCommits = [
 ];
 
 const mockGitHub = {
-  repos: {
-    compareCommits: {
-      endpoint: {
-        merge: jest.fn(),
+  rest: {
+    repos: {
+      compareCommits: {
+        endpoint: {
+          merge: jest.fn(),
+        },
       },
     },
   },

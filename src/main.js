@@ -12,7 +12,7 @@ const { getReleaseNotes } = require("./notes");
 
 async function getOrCreateRelease(github) {
   try {
-    const response = await github.repos.getReleaseByTag({
+    const response = await github.rest.repos.getReleaseByTag({
       owner: context.repo.owner,
       repo: context.repo.repo,
       tag: inputs.tagName,
@@ -38,7 +38,7 @@ async function getOrCreateRelease(github) {
     }
 
     core.info(`Creating release ${inputs.tagName}`);
-    const response = await github.repos.createRelease({
+    const response = await github.rest.repos.createRelease({
       owner: context.repo.owner,
       repo: context.repo.repo,
       tag_name: inputs.tagName,
@@ -91,7 +91,7 @@ async function run() {
     // if we created a draft release, optionally publish it
     if (release.draft && inputs.publish) {
       core.info(`Publishing release ${release.name}`);
-      await github.repos.updateRelease({
+      await github.rest.repos.updateRelease({
         owner: context.repo.owner,
         repo: context.repo.repo,
         release_id: release.id,
