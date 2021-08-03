@@ -26,7 +26,11 @@ inputs:
     required: false
   tag_name:
     description: Tag from which to create the release
-    required: false
+    required: true
+  target_commitish:
+    description: Specifies where the tag is created from
+    required: true
+    default: ${{ github.sha }}
 outputs:
   release_id:
     description: The ID of the release

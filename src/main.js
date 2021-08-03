@@ -29,7 +29,12 @@ async function getOrCreateRelease(github) {
     let body = inputs.body || "TBA";
     if (inputs.previousReleaseSha) {
       core.info("Generating release notes...");
-      body = await getReleaseNotes(github, inputs.body, inputs.previousReleaseSha, context.sha);
+      body = await getReleaseNotes(
+        github,
+        inputs.body,
+        inputs.previousReleaseSha,
+        inputs.targetCommitish
+      );
     }
 
     core.info(`Creating release ${inputs.tagName}`);
@@ -37,6 +42,7 @@ async function getOrCreateRelease(github) {
       owner: context.repo.owner,
       repo: context.repo.repo,
       tag_name: inputs.tagName,
+      target_commitish: inputs.targetCommitish,
       name: inputs.releaseName || inputs.tagName,
       body,
       prerelease: inputs.prerelease,

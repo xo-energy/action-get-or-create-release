@@ -13206,7 +13206,6 @@ function wrappy (fn, cb) {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const core = __nccwpck_require__(2186);
-const { context } = __nccwpck_require__(5438);
 
 function stripRefs(input) {
   return input ? input.replace("refs/tags/", "") : input;
@@ -13220,9 +13219,9 @@ const inputs = {
   previousReleaseSha: core.getInput("previous_release_sha"),
   publish: core.getInput("publish", { required: true }) === "true",
   releaseName: stripRefs(core.getInput("release_name")),
-  tagName: stripRefs(core.getInput("tag_name") || context.ref),
+  tagName: stripRefs(core.getInput("tag_name", { required: true })),
+  targetCommitish: core.getInput("target_commitish", { required: true }),
 };
-if (!inputs.tagName) throw new Error("Missing input 'tag_name' (and context.ref is undefined)");
 
 module.exports = inputs;
 
@@ -13514,7 +13513,12 @@ async function getOrCreateRelease(github) {
     let body = inputs.body || "TBA";
     if (inputs.previousReleaseSha) {
       core.info("Generating release notes...");
-      body = await getReleaseNotes(github, inputs.body, inputs.previousReleaseSha, context.sha);
+      body = await getReleaseNotes(
+        github,
+        inputs.body,
+        inputs.previousReleaseSha,
+        inputs.targetCommitish
+      );
     }
 
     core.info(`Creating release ${inputs.tagName}`);
@@ -13522,6 +13526,7 @@ async function getOrCreateRelease(github) {
       owner: context.repo.owner,
       repo: context.repo.repo,
       tag_name: inputs.tagName,
+      target_commitish: inputs.targetCommitish,
       name: inputs.releaseName || inputs.tagName,
       body,
       prerelease: inputs.prerelease,
