@@ -1,13 +1,11 @@
-jest.mock("@actions/github", () => {
-  return {
-    context: {
-      repo: {
-        owner: "org",
-        repo: "project",
-      },
+jest.mock("@actions/github", () => ({
+  context: {
+    repo: {
+      owner: "org",
+      repo: "project",
     },
-  };
-});
+  },
+}));
 jest.unmock("../src/notes");
 
 const notes = require("../src/notes");

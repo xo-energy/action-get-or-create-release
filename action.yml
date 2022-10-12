@@ -38,7 +38,7 @@ outputs:
     description: The URL for uploading assets to the release
 runs:
   using: node16
-  main: dist/index.js 
+  main: dist/index.js
 branding:
   icon: tag
   color: blue
