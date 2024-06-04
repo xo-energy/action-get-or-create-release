@@ -2,6 +2,9 @@
   "name": "action-get-or-create-release",
   "private": true,
   "description": "GitHub Action that creates a GitHub release",
+  "engines": {
+    "node": "~20.14.0"
+  },
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "npm run lint && npm run test && npm run clean",
