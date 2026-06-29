@@ -2,15 +2,15 @@
   "plugins": ["@vitest"],
   "extends": ["airbnb-base", "plugin:@vitest/legacy-recommended", "prettier"],
   "env": {
-    "commonjs": true,
-    "es6": true,
+    "es2022": true,
     "node": true
   },
   "parserOptions": {
     "ecmaVersion": 2022
   },
   "rules": {
-    "prefer-destructuring": "off"
+    "prefer-destructuring": "off",
+    "import/extensions": "off"
   },
   "overrides": [
     {

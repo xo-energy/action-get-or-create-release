@@ -1,14 +1,14 @@
-const core = require("@actions/core");
-const { context, getOctokit } = require("@actions/github");
-const glob = require("@actions/glob");
+import * as core from "@actions/core";
+import { context, getOctokit } from "@actions/github";
+import * as glob from "@actions/glob";
 
-const bytes = require("bytes");
-const fs = require("fs");
-const mime = require("mime-types");
-const { basename } = require("path");
+import bytes from "bytes";
+import fs from "node:fs";
+import mime from "mime-types";
+import { basename } from "node:path";
 
-const inputs = require("./inputs");
-const { getReleaseNotes } = require("./notes");
+import inputs from "./inputs.js";
+import { getReleaseNotes } from "./notes.js";
 
 async function getOrCreateRelease(github) {
   try {

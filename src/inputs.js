@@ -1,4 +1,4 @@
-const core = require("@actions/core");
+import * as core from "@actions/core";
 
 function stripRefs(input) {
   return input ? input.replace("refs/tags/", "") : input;
@@ -16,4 +16,4 @@ const inputs = {
   targetCommitish: core.getInput("target_commitish", { required: true }),
 };
 
-module.exports = inputs;
+export default inputs;

@@ -1,8 +1,10 @@
-const core = require("@actions/core");
-const { context } = require("@actions/github");
+import * as core from "@actions/core";
+import { context } from "@actions/github";
 
-const issueParser = require("issue-parser")("github");
-const mustache = require("mustache");
+import createIssueParser from "issue-parser";
+import mustache from "mustache";
+
+const issueParser = createIssueParser("github");
 
 const template = `
 # Changes
@@ -63,4 +65,4 @@ async function getReleaseNotes(github, body, base, head) {
   });
 }
 
-module.exports = { getClosers, getCommits, getReleaseNotes };
+export { getClosers, getCommits, getReleaseNotes };
