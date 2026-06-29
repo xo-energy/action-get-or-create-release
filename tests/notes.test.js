@@ -1,14 +1,13 @@
-jest.mock("@actions/github", () => ({
-  context: {
-    repo: {
-      owner: "org",
-      repo: "project",
-    },
-  },
-}));
-jest.unmock("../src/notes");
+// notes.js reads @actions/github `context.repo`, which derives owner/repo from
+// GITHUB_REPOSITORY at access time — so we set that instead of mocking the module
+// (vi.mock can't intercept the require() this still uses pre-ESM). The octokit
+// client is passed in as a parameter, so it's a plain mock.
+let notes;
 
-const notes = require("../src/notes");
+beforeAll(async () => {
+  process.env.GITHUB_REPOSITORY = "org/project";
+  notes = await import("../src/notes");
+});
 
 const issue57 = {
   action: "Fixes",
@@ -79,13 +78,13 @@ const mockGitHub = {
     repos: {
       compareCommits: {
         endpoint: {
-          merge: jest.fn(),
+          merge: vi.fn(),
         },
       },
     },
   },
   paginate: {
-    iterator: jest.fn(),
+    iterator: vi.fn(),
   },
 };
 
@@ -112,11 +111,7 @@ describe("getClosers", () => {
 
 describe("getReleaseNotes", () => {
   beforeAll(() => {
-    mockGitHub.paginate.iterator.mockReturnValue({
-      *[Symbol.iterator]() {
-        yield { data: { commits: mockCommits } };
-      },
-    });
+    mockGitHub.paginate.iterator.mockReturnValue([{ data: { commits: mockCommits } }]);
   });
 
   test("matches template", async () => {
@@ -129,7 +124,7 @@ describe("getReleaseNotes", () => {
 - def Add feature ([User1](https://github.com/org/project/commits?author=user); fixes #2)
 - ghi Add feature ([Contributor1](https://github.com/org/project/commits?author=contributor); fixes #3 #4)
 - xyz Cleanup ([User1](https://github.com/org/project/commits?author=user))
-`.trimLeft()
+`.trimStart()
     );
   });
 });

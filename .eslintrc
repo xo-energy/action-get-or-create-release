@@ -1,15 +1,23 @@
 {
-  "plugins": ["jest"],
-  "extends": ["airbnb-base", "plugin:jest/recommended", "prettier"],
+  "plugins": ["@vitest"],
+  "extends": ["airbnb-base", "plugin:@vitest/legacy-recommended", "prettier"],
   "env": {
     "commonjs": true,
     "es6": true,
     "node": true
   },
   "parserOptions": {
-    "ecmaVersion": 2019
+    "ecmaVersion": 2022
   },
   "rules": {
     "prefer-destructuring": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["tests/**/*.js"],
+      "env": {
+        "@vitest/env": true
+      }
+    }
+  ]
 }
