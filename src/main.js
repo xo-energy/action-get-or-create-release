@@ -33,7 +33,7 @@ async function getOrCreateRelease(github) {
         github,
         inputs.body,
         inputs.previousReleaseSha,
-        inputs.targetCommitish
+        inputs.targetCommitish,
       );
     }
 
@@ -64,7 +64,7 @@ async function uploadAssets(github, uploadUrl, patterns) {
     core.info(`Uploading asset '${file}' (${bytes(stat.size)} ${contentType})`);
 
     // do these one at a time to avoid throttling, etc.
-    // eslint-disable-next-line no-await-in-loop
+
     await github.request(`POST ${uploadUrl}`, {
       name: basename(file),
       headers: {

@@ -124,7 +124,7 @@ describe("getReleaseNotes", () => {
 - def Add feature ([User1](https://github.com/org/project/commits?author=user); fixes #2)
 - ghi Add feature ([Contributor1](https://github.com/org/project/commits?author=contributor); fixes #3 #4)
 - xyz Cleanup ([User1](https://github.com/org/project/commits?author=user))
-`.trimStart()
+`.trimStart(),
     );
   });
 });

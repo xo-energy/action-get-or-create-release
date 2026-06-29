@@ -31,7 +31,7 @@ async function getCommits(github, base, head) {
       base,
       head,
     });
-    // eslint-disable-next-line no-restricted-syntax
+
     for await (const response of github.paginate.iterator(request)) {
       commits = commits.concat(response.data.commits);
     }
